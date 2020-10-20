@@ -1,26 +1,49 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { Component } from 'react';
 import './App.css';
+import { createStore } from 'redux';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+function rootReducer(state = [], action) {
+  switch(action.type) {
+    case 'ADD-ONE':
+        return state.concat([action.data])
+      case 'SUBTRACT-ONE':
+        return state.concat([action.data])
+      default: 
+      return state
+  }
 }
+
+let store = createStore(rootReducer);
+
+class App extends Component {
+
+  constructor(){
+    super()
+    store.subscribe(() => {
+      console.log('subscribing to store');
+      console.log(store.getState());
+   });
+  }
+
+  increment() {
+    store.dispatch({type: 'ADD-ONE', data: 'added one'});
+  }
+
+  decrement() {
+    store.dispatch({type: 'SUBTRACT-ONE', data: 'subtracted one'});
+  }
+
+  render() {
+      return (
+        <div className="App">
+        <h1>Nemanja's counter</h1>
+          
+          <button onClick={this.increment}>Increment</button>
+          <button onClick={this.decrement}>Decrement</button>
+        </div>
+      );
+    }
+  }
+  
 
 export default App;
